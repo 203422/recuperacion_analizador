@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles.css">
+    <title>Analizador</title>
+</head>
+
+<body>
+    <main class="container content">
+        <h1>Analizador Léxico y Sintáctico</h1>
+        <form method="post">
+            <textarea name="code" rows="10" cols="50"
+                placeholder="Escribe tu código aquí...">{{ request.form.code if request.method == 'POST' else '' }}</textarea><br>
+            <button type="submit">Analizar código</button>
+        </form>
+
+
+        <div class="results">
+            <div class="result_lex">
+                <h2>Análisis Léxico:</h2>
+
+                <table class="table table-bordered">
+
+                    <thead>
+                        <tr>
+                            <th>Tokens</th>
+                            <th>PR</th>
+                            <th>ID</th>
+                            <th>Cadenas</th>
+                            <th>Símbolos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for token in tokens %}
+                        <tr>
+                            <td>{{token[1]}}</td>
+                            <td>{% if token[0] == 'IMPORT' or token[0] == 'FMT' or token[0] == 'FUNC' or token[0] ==
+                                'MAIN' %} X {% endif %}</td>
+                            <td>{% if token[0] == 'IDENTIFIER' %} X {% endif %}</td>
+                            <td>{% if token[0] == 'STRING_LITERAL' %} X {% endif %}</td>
+                            <td>{% if token[0] not in ['IMPORT', 'FMT', 'FUNC', 'MAIN', 'STRING_LITERAL', 'IDENTIFIER']
+                                %} X {% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td>{{ token_count['PR'] }}</td>
+                            <td>{{ token_count['IDENTIFIER'] }}</td>
+                            <td>{{ token_count['STRING'] }}</td>
+                            <td>{{ token_count['SYM'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result_sem">
+                <h2>Análisis Sintáctico y Semántico</h2>
+                {% if tokens %}
+                <div class="error">
+                    {% if syntax_error %}
+                    {{ syntax_error }}
+                    {% else %}
+                    El código es correcto
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

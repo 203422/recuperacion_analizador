@@ -1,0 +1,256 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    SEMICOLON
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> import_statement function_definition
+Rule 2     import_statement -> IMPORT STRING_LITERAL
+Rule 3     function_definition -> FUNC MAIN LPAREN RPAREN block
+Rule 4     block -> LBRACE statements RBRACE
+Rule 5     statements -> statement
+Rule 6     statements -> statement statements
+Rule 7     statement -> expression
+Rule 8     expression -> FMT DOT IDENTIFIER LPAREN expression_list RPAREN
+Rule 9     expression_list -> STRING_LITERAL
+Rule 10    expression_list -> empty
+Rule 11    empty -> <empty>
+
+Terminals, with rules where they appear
+
+DOT                  : 8
+FMT                  : 8
+FUNC                 : 3
+IDENTIFIER           : 8
+IMPORT               : 2
+LBRACE               : 4
+LPAREN               : 3 8
+MAIN                 : 3
+RBRACE               : 4
+RPAREN               : 3 8
+SEMICOLON            : 
+STRING_LITERAL       : 2 9
+error                : 
+
+Nonterminals, with rules where they appear
+
+block                : 3
+empty                : 10
+expression           : 7
+expression_list      : 8
+function_definition  : 1
+import_statement     : 1
+program              : 0
+statement            : 5 6
+statements           : 4 6
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . import_statement function_definition
+    (2) import_statement -> . IMPORT STRING_LITERAL
+
+    IMPORT          shift and go to state 3
+
+    program                        shift and go to state 1
+    import_statement               shift and go to state 2
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> import_statement . function_definition
+    (3) function_definition -> . FUNC MAIN LPAREN RPAREN block
+
+    FUNC            shift and go to state 5
+
+    function_definition            shift and go to state 4
+
+state 3
+
+    (2) import_statement -> IMPORT . STRING_LITERAL
+
+    STRING_LITERAL  shift and go to state 6
+
+
+state 4
+
+    (1) program -> import_statement function_definition .
+
+    $end            reduce using rule 1 (program -> import_statement function_definition .)
+
+
+state 5
+
+    (3) function_definition -> FUNC . MAIN LPAREN RPAREN block
+
+    MAIN            shift and go to state 7
+
+
+state 6
+
+    (2) import_statement -> IMPORT STRING_LITERAL .
+
+    FUNC            reduce using rule 2 (import_statement -> IMPORT STRING_LITERAL .)
+
+
+state 7
+
+    (3) function_definition -> FUNC MAIN . LPAREN RPAREN block
+
+    LPAREN          shift and go to state 8
+
+
+state 8
+
+    (3) function_definition -> FUNC MAIN LPAREN . RPAREN block
+
+    RPAREN          shift and go to state 9
+
+
+state 9
+
+    (3) function_definition -> FUNC MAIN LPAREN RPAREN . block
+    (4) block -> . LBRACE statements RBRACE
+
+    LBRACE          shift and go to state 11
+
+    block                          shift and go to state 10
+
+state 10
+
+    (3) function_definition -> FUNC MAIN LPAREN RPAREN block .
+
+    $end            reduce using rule 3 (function_definition -> FUNC MAIN LPAREN RPAREN block .)
+
+
+state 11
+
+    (4) block -> LBRACE . statements RBRACE
+    (5) statements -> . statement
+    (6) statements -> . statement statements
+    (7) statement -> . expression
+    (8) expression -> . FMT DOT IDENTIFIER LPAREN expression_list RPAREN
+
+    FMT             shift and go to state 15
+
+    statements                     shift and go to state 12
+    statement                      shift and go to state 13
+    expression                     shift and go to state 14
+
+state 12
+
+    (4) block -> LBRACE statements . RBRACE
+
+    RBRACE          shift and go to state 16
+
+
+state 13
+
+    (5) statements -> statement .
+    (6) statements -> statement . statements
+    (5) statements -> . statement
+    (6) statements -> . statement statements
+    (7) statement -> . expression
+    (8) expression -> . FMT DOT IDENTIFIER LPAREN expression_list RPAREN
+
+    RBRACE          reduce using rule 5 (statements -> statement .)
+    FMT             shift and go to state 15
+
+    statement                      shift and go to state 13
+    statements                     shift and go to state 17
+    expression                     shift and go to state 14
+
+state 14
+
+    (7) statement -> expression .
+
+    FMT             reduce using rule 7 (statement -> expression .)
+    RBRACE          reduce using rule 7 (statement -> expression .)
+
+
+state 15
+
+    (8) expression -> FMT . DOT IDENTIFIER LPAREN expression_list RPAREN
+
+    DOT             shift and go to state 18
+
+
+state 16
+
+    (4) block -> LBRACE statements RBRACE .
+
+    $end            reduce using rule 4 (block -> LBRACE statements RBRACE .)
+
+
+state 17
+
+    (6) statements -> statement statements .
+
+    RBRACE          reduce using rule 6 (statements -> statement statements .)
+
+
+state 18
+
+    (8) expression -> FMT DOT . IDENTIFIER LPAREN expression_list RPAREN
+
+    IDENTIFIER      shift and go to state 19
+
+
+state 19
+
+    (8) expression -> FMT DOT IDENTIFIER . LPAREN expression_list RPAREN
+
+    LPAREN          shift and go to state 20
+
+
+state 20
+
+    (8) expression -> FMT DOT IDENTIFIER LPAREN . expression_list RPAREN
+    (9) expression_list -> . STRING_LITERAL
+    (10) expression_list -> . empty
+    (11) empty -> .
+
+    STRING_LITERAL  shift and go to state 22
+    RPAREN          reduce using rule 11 (empty -> .)
+
+    expression_list                shift and go to state 21
+    empty                          shift and go to state 23
+
+state 21
+
+    (8) expression -> FMT DOT IDENTIFIER LPAREN expression_list . RPAREN
+
+    RPAREN          shift and go to state 24
+
+
+state 22
+
+    (9) expression_list -> STRING_LITERAL .
+
+    RPAREN          reduce using rule 9 (expression_list -> STRING_LITERAL .)
+
+
+state 23
+
+    (10) expression_list -> empty .
+
+    RPAREN          reduce using rule 10 (expression_list -> empty .)
+
+
+state 24
+
+    (8) expression -> FMT DOT IDENTIFIER LPAREN expression_list RPAREN .
+
+    FMT             reduce using rule 8 (expression -> FMT DOT IDENTIFIER LPAREN expression_list RPAREN .)
+    RBRACE          reduce using rule 8 (expression -> FMT DOT IDENTIFIER LPAREN expression_list RPAREN .)
+
